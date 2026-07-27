@@ -397,16 +397,116 @@ y **Pandas** para administrar la información registrada.
 
 def costo_unitario():
 
-    st.title("📊 Costo Unitario Total")
+    st.title("📊 Cálculo de Costo Unitario Total")
 
     st.markdown("---")
 
     st.write("""
-En este módulo se utilizará la función
-calcular_costo_unitario_total().
+Este módulo utiliza la función **calcular_costo_unitario_total()**
+de la librería externa proporcionada por el curso.
 """)
 
-    st.info("🚧 Este módulo será desarrollado en la Parte 4.")
+    if "historial_costos" not in st.session_state:
+        st.session_state.historial_costos = []
+
+    with st.form("form_costo"):
+
+        producto = st.text_input("Nombre del producto")
+
+        materiales = st.number_input(
+            "Costo de materiales (S/.)",
+            min_value=0.0,
+            step=1.0,
+            format="%.2f"
+        )
+
+        mano_obra = st.number_input(
+            "Costo de mano de obra (S/.)",
+            min_value=0.0,
+            step=1.0,
+            format="%.2f"
+        )
+
+        costos_indirectos = st.number_input(
+            "Costos indirectos (S/.)",
+            min_value=0.0,
+            step=1.0,
+            format="%.2f"
+        )
+
+        unidades = st.number_input(
+            "Unidades producidas",
+            min_value=1,
+            step=1
+        )
+
+        calcular = st.form_submit_button("🧮 Calcular")
+
+    if calcular:
+
+        try:
+
+            resultado = calcular_costo_unitario_total(
+                materiales,
+                mano_obra,
+                costos_indirectos,
+                unidades
+            )
+
+            st.success("Cálculo realizado correctamente.")
+
+            c1, c2 = st.columns(2)
+
+            with c1:
+                st.metric(
+                    "💰 Costo Total",
+                    f"S/ {resultado['costo_total']:,.2f}"
+                )
+
+            with c2:
+                st.metric(
+                    "📦 Costo Unitario",
+                    f"S/ {resultado['costo_unitario']:,.2f}"
+                )
+
+            registro = {
+                "Producto": producto,
+                "Materiales": materiales,
+                "Mano de Obra": mano_obra,
+                "Costos Indirectos": costos_indirectos,
+                "Unidades": unidades,
+                "Costo Total": resultado["costo_total"],
+                "Costo Unitario": resultado["costo_unitario"]
+            }
+
+            st.session_state.historial_costos.append(registro)
+
+        except Exception as e:
+            st.error(str(e))
+
+    st.markdown("---")
+
+    if len(st.session_state.historial_costos) > 0:
+
+        st.subheader("📋 Historial de Cálculos")
+
+        df = pd.DataFrame(st.session_state.historial_costos)
+
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+        if st.button("🗑 Limpiar Historial"):
+
+            st.session_state.historial_costos = []
+
+            st.rerun()
+
+    else:
+
+        st.info("Aún no se han realizado cálculos.")
 
 # ==========================================================
 # EJERCICIO 4
