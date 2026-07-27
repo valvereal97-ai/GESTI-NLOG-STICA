@@ -233,11 +233,163 @@ def registro_productos():
     st.markdown("---")
 
     st.write("""
-En este módulo se registrarán productos
-empleando NumPy y Pandas.
+Registre los productos del inventario.
+Este módulo utiliza **NumPy** para realizar cálculos estadísticos
+y **Pandas** para administrar la información registrada.
 """)
 
-    st.info("🚧 Este módulo será desarrollado en la Parte 3.")
+    #==========================================================
+    # SESSION STATE
+    #==========================================================
+
+    if "inventario" not in st.session_state:
+        st.session_state.inventario = []
+
+    st.markdown("### ➕ Registrar Producto")
+
+    with st.form("form_producto"):
+
+        codigo = st.text_input("Código")
+
+        producto = st.text_input("Nombre del Producto")
+
+        categoria = st.selectbox(
+            "Categoría",
+            [
+                "Herramientas",
+                "Electricidad",
+                "Pinturas",
+                "Ferretería",
+                "Otros"
+            ]
+        )
+
+        precio = st.number_input(
+            "Precio (S/.)",
+            min_value=0.0,
+            step=1.0,
+            format="%.2f"
+        )
+
+        stock = st.number_input(
+            "Stock",
+            min_value=0,
+            step=1
+        )
+
+        guardar = st.form_submit_button("💾 Registrar Producto")
+
+    if guardar:
+
+        if codigo.strip() == "":
+            st.warning("Ingrese el código del producto.")
+
+        elif producto.strip() == "":
+            st.warning("Ingrese el nombre del producto.")
+
+        elif precio <= 0:
+            st.warning("El precio debe ser mayor que cero.")
+
+        else:
+
+            nuevo = {
+
+                "Código": codigo,
+                "Producto": producto,
+                "Categoría": categoria,
+                "Precio": precio,
+                "Stock": stock
+
+            }
+
+            st.session_state.inventario.append(nuevo)
+
+            st.success("✅ Producto registrado correctamente.")
+
+    st.markdown("---")
+
+    if len(st.session_state.inventario) > 0:
+
+        df = pd.DataFrame(st.session_state.inventario)
+
+        #======================================================
+        # NUMPY
+        #======================================================
+
+        precios = np.array(df["Precio"])
+
+        precio_promedio = np.mean(precios)
+
+        precio_maximo = np.max(precios)
+
+        precio_minimo = np.min(precios)
+
+        valor_total = np.sum(df["Precio"] * df["Stock"])
+
+        cantidad = len(df)
+
+        st.subheader("📊 Indicadores del Inventario")
+
+        c1, c2, c3, c4, c5 = st.columns(5)
+
+        with c1:
+
+            st.metric(
+                "📦 Productos",
+                cantidad
+            )
+
+        with c2:
+
+            st.metric(
+                "💲 Precio Promedio",
+                f"S/ {precio_promedio:,.2f}"
+            )
+
+        with c3:
+
+            st.metric(
+                "📈 Precio Máximo",
+                f"S/ {precio_maximo:,.2f}"
+            )
+
+        with c4:
+
+            st.metric(
+                "📉 Precio Mínimo",
+                f"S/ {precio_minimo:,.2f}"
+            )
+
+        with c5:
+
+            st.metric(
+                "💰 Valor Inventario",
+                f"S/ {valor_total:,.2f}"
+            )
+
+        st.markdown("---")
+
+        st.subheader("📋 Productos Registrados")
+
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+        st.markdown("---")
+
+        if st.button("🗑 Limpiar Productos"):
+
+            st.session_state.inventario = []
+
+            st.success("Inventario eliminado correctamente.")
+
+            st.rerun()
+
+    else:
+
+        st.info("No existen productos registrados.")
 
 # ==========================================================
 # EJERCICIO 3
