@@ -38,7 +38,7 @@ def home():
 
     st.markdown("---")
 
-    st.image("imagenes.jpg", width=750)
+    st.image("images.png", use_container_width=True)
 
     st.markdown("---")
 
