@@ -522,14 +522,120 @@ def gestion_inventario():
     st.markdown("---")
 
     st.write("""
-En este módulo se implementará un CRUD
-utilizando la clase InventarioProducto.
+Este módulo utiliza la clase **InventarioProducto**
+de la librería del proyecto para calcular automáticamente
+los indicadores del inventario.
 """)
 
-    st.info("🚧 Este módulo será desarrollado en la Parte 5.")
+    if "gestion_inventario" not in st.session_state:
+        st.session_state.gestion_inventario = []
+
+    with st.form("form_inventario"):
+
+        nombre = st.text_input("Nombre del Producto")
+
+        costo = st.number_input(
+            "Costo Unitario (S/.)",
+            min_value=0.01,
+            step=1.0,
+            format="%.2f"
+        )
+
+        precio = st.number_input(
+            "Precio de Venta (S/.)",
+            min_value=0.01,
+            step=1.0,
+            format="%.2f"
+        )
+
+        stock = st.number_input(
+            "Stock Actual",
+            min_value=0,
+            step=1
+        )
+
+        stock_minimo = st.number_input(
+            "Stock Mínimo",
+            min_value=0,
+            step=1
+        )
+
+        guardar = st.form_submit_button("💾 Registrar")
+
+    if guardar:
+
+        try:
+
+            producto = InventarioProducto(
+                nombre,
+                costo,
+                precio,
+                stock,
+                stock_minimo
+            )
+
+            resumen = producto.resumen()
+
+            st.session_state.gestion_inventario.append(resumen)
+
+            st.success("Producto registrado correctamente.")
+
+        except Exception as e:
+
+            st.error(str(e))
+
     st.markdown("---")
 
-    st.info("Aquí construiremos el CRUD usando InventarioProducto en la Parte 5.")
+    if len(st.session_state.gestion_inventario) > 0:
+
+        df = pd.DataFrame(st.session_state.gestion_inventario)
+
+        st.subheader("📋 Inventario")
+
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+        st.markdown("---")
+
+        c1, c2, c3 = st.columns(3)
+
+        with c1:
+
+            st.metric(
+                "📦 Productos",
+                len(df)
+            )
+
+        with c2:
+
+            st.metric(
+                "💰 Valor Total",
+                f"S/ {df['valor_inventario'].sum():,.2f}"
+            )
+
+        with c3:
+
+            reposicion = df["necesita_reposicion"].sum()
+
+            st.metric(
+                "⚠ Reposición",
+                int(reposicion)
+            )
+
+        st.markdown("---")
+
+        if st.button("🗑 Limpiar Inventario"):
+
+            st.session_state.gestion_inventario = []
+
+            st.rerun()
+
+    else:
+
+        st.info("No existen productos registrados.")
     # ==========================================================
 # SIDEBAR
 # ==========================================================
