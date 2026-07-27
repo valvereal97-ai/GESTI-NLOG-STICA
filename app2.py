@@ -25,74 +25,40 @@ st.set_page_config(
 if "productos" not in st.session_state:
     st.session_state.productos = []
 
-# ==========================================================
-# SIDEBAR
-# ==========================================================
-
-st.sidebar.title("📦 Sistema de Gestión Logística")
-
-st.sidebar.markdown("---")
-
-opcion = st.sidebar.radio(
-    "Seleccione una opción",
-    (
-        "🏠 Home",
-        "💰 Ejercicio 1",
-        "📋 Ejercicio 2",
-        "📊 Ejercicio 3",
-        "📦 Ejercicio 4"
-    )
-)
-
-st.sidebar.markdown("---")
-
-st.sidebar.success("Python Fundamentals")
-
-st.sidebar.write("Autor:")
-
-st.sidebar.write("Luis Fernando Valverde Mendoza")
+if "flujo_caja" not in st.session_state:
+    st.session_state.flujo_caja = []
 
 # ==========================================================
-# HOME
+# FUNCIÓN HOME
 # ==========================================================
 
-if opcion == "🏠 Home":
+def home():
 
     st.title("📦 Sistema de Gestión Logística")
 
     st.markdown("---")
 
-    # ==================================================
-    # CAMBIAR ESTA IMAGEN
-    #
-    # Coloca una imagen llamada:
-    #
-    # imagenes/logo.png
-    #
-    # o cambia la ruta por la que desees.
-    # ==================================================
-
     try:
-        st.image("imagenes/logo.png", width=700)
+        st.image("imagenes/logo.png", width=750)
     except:
-        st.info("📷 Aquí irá la imagen principal del proyecto.")
+        st.info("📷 Aquí aparecerá la imagen principal del proyecto.")
 
     st.markdown("---")
 
-    st.header("Descripción del Proyecto")
+    st.header("📖 Descripción del Proyecto")
 
     st.write("""
-Este proyecto fue desarrollado utilizando **Python** y **Streamlit**
-como parte del curso **Python Fundamentals**.
+Este proyecto fue desarrollado utilizando **Python**, **Streamlit**,
+**NumPy** y **Pandas** como parte del curso **Python Fundamentals**.
 
-El objetivo es desarrollar una aplicación que permita resolver
-cuatro ejercicios utilizando funciones, clases,
-NumPy, Pandas y Streamlit.
+El objetivo es implementar una aplicación web que permita resolver
+cuatro ejercicios aplicando funciones, programación orientada a objetos,
+manejo de arreglos y estructuras de datos.
 """)
 
     st.markdown("---")
 
-    st.header("Tecnologías utilizadas")
+    st.header("🛠 Tecnologías utilizadas")
 
     col1, col2, col3 = st.columns(3)
 
@@ -107,74 +73,169 @@ NumPy, Pandas y Streamlit.
 
     st.markdown("---")
 
-    st.header("Módulos")
+    st.header("📚 Módulos del Sistema")
 
     c1, c2 = st.columns(2)
 
     with c1:
 
-        st.success("💰 Ejercicio 1")
-        st.write("Flujo de Caja")
+        st.success("💰 Flujo de Caja")
 
-        st.success("📋 Ejercicio 2")
-        st.write("Registro de Productos")
+        st.write("""
+Registro de ingresos y gastos para calcular
+automáticamente el saldo disponible.
+""")
+
+        st.success("📋 Registro de Productos")
+
+        st.write("""
+Administración de productos utilizando
+NumPy y Pandas.
+""")
 
     with c2:
 
-        st.success("📊 Ejercicio 3")
-        st.write("Costo Unitario Total")
+        st.success("📊 Costo Unitario Total")
 
-        st.success("📦 Ejercicio 4")
-        st.write("CRUD Inventario")
+        st.write("""
+Uso de funciones de Python para calcular
+el costo unitario de productos.
+""")
+
+        st.success("📦 Gestión de Inventario")
+
+        st.write("""
+CRUD utilizando Programación Orientada
+a Objetos.
+""")
 
     st.markdown("---")
 
-    st.info("Seleccione una opción desde el menú lateral.")
+    st.info("Seleccione un módulo desde el menú lateral.")
 
 # ==========================================================
 # EJERCICIO 1
 # ==========================================================
 
-elif opcion == "💰 Ejercicio 1":
+def flujo_caja():
 
-    st.title("💰 Ejercicio 1")
+    st.title("💰 Flujo de Caja")
 
     st.markdown("---")
 
-    st.info("Aquí construiremos el Flujo de Caja en la Parte 2.")
+    st.write("""
+En este módulo se registrarán los ingresos y gastos
+para calcular automáticamente el saldo final.
+""")
+
+    st.info("🚧 Este módulo será desarrollado en la Parte 2.")
 
 # ==========================================================
 # EJERCICIO 2
 # ==========================================================
 
-elif opcion == "📋 Ejercicio 2":
+def registro_productos():
 
-    st.title("📋 Ejercicio 2")
+    st.title("📋 Registro de Productos")
 
     st.markdown("---")
 
-    st.info("Aquí construiremos el Registro de Productos en la Parte 3.")
+    st.write("""
+En este módulo se registrarán productos
+empleando NumPy y Pandas.
+""")
+
+    st.info("🚧 Este módulo será desarrollado en la Parte 3.")
 
 # ==========================================================
 # EJERCICIO 3
 # ==========================================================
 
-elif opcion == "📊 Ejercicio 3":
+def costo_unitario():
 
-    st.title("📊 Ejercicio 3")
+    st.title("📊 Costo Unitario Total")
 
     st.markdown("---")
 
-    st.info("Aquí utilizaremos la función calcular_costo_unitario_total() en la Parte 4.")
+    st.write("""
+En este módulo se utilizará la función
+calcular_costo_unitario_total().
+""")
+
+    st.info("🚧 Este módulo será desarrollado en la Parte 4.")
 
 # ==========================================================
 # EJERCICIO 4
 # ==========================================================
 
-elif opcion == "📦 Ejercicio 4":
+def gestion_inventario():
 
-    st.title("📦 Ejercicio 4")
+    st.title("📦 Gestión de Inventario")
 
     st.markdown("---")
 
+    st.write("""
+En este módulo se implementará un CRUD
+utilizando la clase InventarioProducto.
+""")
+
+    st.info("🚧 Este módulo será desarrollado en la Parte 5.")
+    st.markdown("---")
+
     st.info("Aquí construiremos el CRUD usando InventarioProducto en la Parte 5.")
+    # ==========================================================
+# SIDEBAR
+# ==========================================================
+
+st.sidebar.title("📦 Sistema de Gestión Logística")
+
+st.sidebar.markdown("---")
+
+st.sidebar.markdown("## 📋 Menú Principal")
+
+opcion = st.sidebar.radio(
+    "Seleccione un módulo",
+    (
+        "🏠 Inicio",
+        "💰 Flujo de Caja",
+        "📋 Registro de Productos",
+        "📊 Costo Unitario Total",
+        "📦 Gestión de Inventario"
+    )
+)
+
+st.sidebar.markdown("---")
+
+st.sidebar.subheader("👨‍💻 Información")
+
+st.sidebar.write("**Autor:**")
+st.sidebar.write("Luis Fernando Valverde Mendoza")
+
+st.sidebar.write("**Curso:**")
+st.sidebar.write("Python Fundamentals")
+
+st.sidebar.write("**Aplicación:**")
+st.sidebar.write("Sistema de Gestión Logística")
+
+st.sidebar.markdown("---")
+
+st.sidebar.success("✅ Proyecto desarrollado con Streamlit")
+
+# ==========================================================
+# MENÚ PRINCIPAL
+# ==========================================================
+
+if opcion == "🏠 Inicio":
+    home()
+
+elif opcion == "💰 Flujo de Caja":
+    flujo_caja()
+
+elif opcion == "📋 Registro de Productos":
+    registro_productos()
+
+elif opcion == "📊 Costo Unitario Total":
+    costo_unitario()
+
+elif opcion == "📦 Gestión de Inventario":
+    gestion_inventario()
