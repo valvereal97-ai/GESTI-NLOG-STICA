@@ -8,6 +8,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+from libreria_funciones_proyecto1 import calcular_costo_unitario_total
+from libreria_clases_proyecto1 import InventarioProducto
+
 # ==========================================================
 # CONFIGURACIÓN DE LA PÁGINA
 # ==========================================================
