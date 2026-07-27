@@ -121,11 +121,106 @@ def flujo_caja():
     st.markdown("---")
 
     st.write("""
-En este módulo se registrarán los ingresos y gastos
-para calcular automáticamente el saldo final.
+Registre los movimientos de caja de la empresa.
+Cada movimiento puede ser un **Ingreso** o un **Gasto**.
+El sistema calculará automáticamente el saldo disponible.
 """)
 
-    st.info("🚧 Este módulo será desarrollado en la Parte 2.")
+    st.markdown("### ➕ Registrar Movimiento")
+
+    with st.form("form_flujo"):
+
+        concepto = st.text_input("Concepto")
+
+        tipo = st.selectbox(
+            "Tipo de Movimiento",
+            ["Ingreso", "Gasto"]
+        )
+
+        monto = st.number_input(
+            "Monto (S/.)",
+            min_value=0.0,
+            step=1.0,
+            format="%.2f"
+        )
+
+        agregar = st.form_submit_button("➕ Agregar Movimiento")
+
+    if agregar:
+
+        if concepto.strip() == "":
+            st.warning("Ingrese un concepto.")
+
+        elif monto <= 0:
+            st.warning("El monto debe ser mayor que cero.")
+
+        else:
+
+            nuevo = {
+                "Concepto": concepto,
+                "Tipo": tipo,
+                "Monto": monto
+            }
+
+            st.session_state.flujo_caja.append(nuevo)
+
+            st.success("✅ Movimiento registrado correctamente.")
+
+    st.markdown("---")
+
+    if len(st.session_state.flujo_caja) > 0:
+
+        df = pd.DataFrame(st.session_state.flujo_caja)
+
+        ingresos = df[df["Tipo"] == "Ingreso"]["Monto"].sum()
+        gastos = df[df["Tipo"] == "Gasto"]["Monto"].sum()
+        saldo = ingresos - gastos
+
+        st.subheader("📊 Resumen del Flujo de Caja")
+
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric(
+                "💰 Total Ingresos",
+                f"S/ {ingresos:,.2f}"
+            )
+
+        with col2:
+            st.metric(
+                "📉 Total Gastos",
+                f"S/ {gastos:,.2f}"
+            )
+
+        with col3:
+            st.metric(
+                "💵 Saldo Final",
+                f"S/ {saldo:,.2f}"
+            )
+
+        st.markdown("---")
+
+        st.subheader("📋 Movimientos Registrados")
+
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+        st.markdown("---")
+
+        if st.button("🗑 Limpiar Registros"):
+
+            st.session_state.flujo_caja = []
+
+            st.success("Registros eliminados correctamente.")
+
+            st.rerun()
+
+    else:
+
+        st.info("No existen movimientos registrados.")
 
 # ==========================================================
 # EJERCICIO 2
