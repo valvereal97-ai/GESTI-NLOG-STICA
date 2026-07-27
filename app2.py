@@ -38,7 +38,7 @@ def home():
 
     st.markdown("---")
 
-st.image("imagenes.jpg", width=750)
+    st.image("imagenes.jpg", width=750)
 
     st.markdown("---")
 
