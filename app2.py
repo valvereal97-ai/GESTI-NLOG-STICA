@@ -38,10 +38,7 @@ def home():
 
     st.markdown("---")
 
-    try:
-        st.image("imagenes/logo.png", width=750)
-    except:
-        st.info("📷 Aquí aparecerá la imagen principal del proyecto.")
+st.image("imagenes.jpg", width=750)
 
     st.markdown("---")
 
