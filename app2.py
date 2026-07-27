@@ -178,4 +178,3 @@ elif opcion == "📦 Ejercicio 4":
     st.markdown("---")
 
     st.info("Aquí construiremos el CRUD usando InventarioProducto en la Parte 5.")
-    )
